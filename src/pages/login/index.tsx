@@ -1,22 +1,50 @@
 import React, { useState } from "react";
-import { Text, View, Image, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
 import { style } from "./style";
 import Logo from '../../assets/logo.png';
+import { MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import { Text, View, Image, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
 import { themas } from "../../global/themes";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation,NavigationProp  } from '@react-navigation/native';
+import { useEffect } from 'react';
+
+
+WebBrowser.maybeCompleteAuthSession(); // Necessário para login via navegador
+
 
 export default function Login() {
-    const [email, setEmail] = useState('');
+
+    const navigation = useNavigation();
+     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(true);
     const [loading, setLoading] = useState(false);
+    const [request, response, promptAsync] = Google.useAuthRequest({
+        expoClientId:'794613224770-ls0dvave1st8sui4asdkebvp2u2r89sc.apps.googleusercontent.com',
+        androidClientId:'794613224770-ce862bna6fmdbfm12blv66smc2533kqt.apps.googleusercontent.com',
+        // Se quiser, também pode adicionar iosClientId e androidClientId aqui
+      });
+      
+
+      useEffect(() => {
+        if (response?.type === 'success') {
+          const { authentication } = response;
+          console.log("Token de acesso:", authentication.accessToken);
+          // Redireciona após login com sucesso
+          navigation.navigate("BottomRoutes");
+        }
+      }, [response]);
 
     async function getLogin() {
         try {
             if (!email || !password) {
                 return Alert.alert('Atenção', 'Informe os campos obrigatórios');
             }
+
+            navigation.navigate("BottomRoutes")
 
             setLoading(true); // Indica que a requisição está em andamento
 
@@ -30,12 +58,14 @@ export default function Login() {
                     Alert.alert('Acesso negado', 'E-mail ou senha incorretos');
                 }
                 setLoading(false);
-            }, 2000);
+            }, 1000);
 
         } catch (error) {
             console.log(error);
             Alert.alert('Erro', 'Ocorreu um problema ao tentar fazer login');
-        } 
+        } finally{
+            setLoading(false)
+        }
     }
 
     return (
@@ -83,6 +113,11 @@ export default function Login() {
             <Text style={style.textBottom}>
                 Não tem conta? <Text style={style.textBottomCreate}>Crie agora</Text>
             </Text>
+
+            <TouchableOpacity onPress={() => promptAsync()} style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center' }}>
+  <Image source={require('../../assets/goole.png')} style={{ width: 20, height: 20, marginRight: 8 }} />
+  <Text>Entrar com Google</Text>
+</TouchableOpacity>
         </LinearGradient>
     );
 }

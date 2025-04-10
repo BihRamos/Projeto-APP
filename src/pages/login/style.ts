@@ -13,7 +13,6 @@ export const style = StyleSheet.create({
     boxTop: {
         height: Dimensions.get('window').height / 3,
         width: '100%',
-        backgroundColor: '',
         alignItems: 'center',
         justifyContent: 'center'
 
@@ -22,8 +21,7 @@ export const style = StyleSheet.create({
     boxMid: {
         height: Dimensions.get('window').height / 4,
         width: '100%',
-        backgroundColor: '',
-        paddingHorizontal: 37,
+       paddingHorizontal: 37,
 
 
     },
@@ -31,8 +29,7 @@ export const style = StyleSheet.create({
     boxBottom: {
         height: Dimensions.get('window').height / 3,
         width: '100%',
-        backgroundColor: '',
-        alignItems: 'center',
+       alignItems: 'center',
         justifyContent: 'center'
 
 
@@ -53,10 +50,7 @@ export const style = StyleSheet.create({
 
     },
 
-    titleInput: {
-        marginLeft: 5,
-        color: themas.colors.gray
-    },
+    
 
     BoxInput: {
         width: '100%',
@@ -128,7 +122,8 @@ export const style = StyleSheet.create({
 
     titleInput: {
         marginLeft: 5,
-        marginTop: 20
+        marginTop: 20,
+        color:'black'
     },
     textBottom: {
         fontSize: 16,
